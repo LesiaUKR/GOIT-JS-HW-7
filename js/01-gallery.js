@@ -33,28 +33,36 @@ galleryBox.insertAdjacentHTML("afterbegin", galleryMarkup);
 
 galleryBox.addEventListener('click', onGalleryBoxClick);
 
+
 function onGalleryBoxClick(event) {
     event.preventDefault();
 
     if (!event.target.classList.contains('gallery__image')) {
         return
     }
-    console.log(event.target);
-
-const instance = basicLightbox.create(
-    `
-    <img src="${event.target.dataset.source}" width="800" height="600">
-`
-)
+    
+   const instance = basicLightbox.create(`<img src="${event.target.dataset.source}" width="800" height="600">`, {
+        onShow: instance => {
+            window.addEventListener('keydown', onEscClick);
+        },
+        onClose: instance => {
+            window.removeEventListener('keydown', onEscClick);
+            },
+});
     instance.show()
 
- document.addEventListener('keydown', (e) => {
-   if (e.code === "Escape") {
-	  instance.close(); 
-   }
-})
-    
+    function onEscClick(evt) {
+    if (evt.key === 'Escape') {
+        instance.close();
+        return;
+    }
+
 }
+   
+}
+
+
+   
 
 
 
